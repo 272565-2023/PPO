@@ -1,26 +1,57 @@
 #include <iostream>
+#include <string>
 #include "ui.h"
 
 using namespace std;
 
 
-void dodaj(Student *tab, int indeks)
+void Student::dodaj(int indeks) //dodaje studenta do listy
 {
-	cout<< "Podaj indeks studenta: ";
-	cin>> tab[indeks].id;
+	string idTest;
+	cout<<"Podaj id studenta: ";
+	cin>> idTest;
+	
+	bool czyJestLiczba;
+	do
+	{
+		for(int i=0; i<idTest.length(); i++)
+		{
+			if(!isdigit(idTest[i]))
+			{
+				czyJestLiczba = 0;
+				break;
+			}
+			else
+			{
+				czyJestLiczba = 1;
+			}
+		}
+		if(czyJestLiczba)
+		{
+			id=stoi(idTest);
+		}
+		else
+		{
+			cout<< "Wprowadzono nieprawidlowa wartosc! Podaj id studenta ponownie:";
+			cin>> idTest;
+		}
+	} while (!czyJestLiczba); //mechanizm kontroli czy uzytkownik wprowadza liczbe
+	
 	
 	cout<< "Podaj imie studenta: ";
-	cin>> tab[indeks].imie;
+	cin>> imie;
+	
 	
 	cout<< "Podaj nazwisko studenta: ";
-	cin>> tab[indeks].nazwisko;
+	cin>> nazwisko;
 }
 
-void drukuj(Student *tab, int size)
+void Student::drukuj(int size) //wyswietla liste studentow
 {
+	cout<<"Wyswietlanie listy studentow \n";
 	for(int i=0; i<size; i++)
 	{
-		cout<< "Student "<< tab[i].id<< " "<< tab[i].imie<< " "<< tab[i].nazwisko;
+		cout<< "Student "<< id<< " "<< imie<< " "<< nazwisko;
 		cout<<endl;
 	}
 } 

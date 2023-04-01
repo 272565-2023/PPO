@@ -2,15 +2,20 @@
 
 using namespace std;
 
-struct Student
+class Student
 {
 	int id;
 	string imie;
 	string nazwisko;
+	
+	
+	public:
+		
+	void dodaj(int indeks);
+
+	void drukuj(int size);
 };
 
-void dodaj(Student *tab, int size);
 
-void drukuj(Student *tab, int size);
 
 

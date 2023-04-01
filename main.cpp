@@ -16,11 +16,11 @@ int main()
 	
 	for(int i=0; i<liczbaStudentow; i++)
 	{
-		dodaj(listaStudentow, i);
+		listaStudentow->dodaj(i);
 		cout<< endl;
 	}
 	
-	drukuj(listaStudentow, liczbaStudentow);
+	listaStudentow->drukuj(liczbaStudentow);
 	
 
 	return 0;
