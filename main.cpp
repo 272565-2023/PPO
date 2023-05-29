@@ -1,29 +1,23 @@
-#include "ui.h"
 #include <iostream>
+#include "SpreadSheet.h"
 
 using namespace std;
 
 int main()
 {
-	int liczbaStudentow;
-	cout<<"Oto program przechowujacy liste studentow"<< endl;
-	cout<<"Podaj ilu studentow chcesz dodac do listy:  ";
-	cin>> liczbaStudentow;
-	
-	
-	Student *listaStudentow= new Student[liczbaStudentow];
-	
-	
-	for(int i=0; i<liczbaStudentow; i++)
-	{
-		listaStudentow->dodaj(i);
-		cout<< endl;
-	}
-	
-	listaStudentow->drukuj(liczbaStudentow);
-	
+    Spreadsheet sheet;
+
+    // Ustawienie kilku wartoœci w arkuszu
+    sheet.SetCellValue(0, 0, new StringCell("Hello"));
+    sheet.SetCellValue(0, 1, new NumericCell(42.5));
+    sheet.SetCellValue(1, 0, new StringCell("World"));
+    sheet.SetCellValue(1, 1, new NumericCell(100));
+
+    // Rozszerzenie arkusza o 2 wiersze i 3 kolumny
+    sheet.ExpandSheet(2, 3);
+
+    // Wyœwietlenie zawartoœci arkusza
+    sheet.PrintSheet();
 
 	return 0;
 }
-
-//dodaj przechowywanie imion i nazwisk oprócz numeru indeksu uzywajac struktur
