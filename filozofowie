@@ -1,0 +1,69 @@
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <chrono>
+#include <random>
+
+const int num_philosophers = 5;
+
+std::mutex forks[num_philosophers];
+std::mutex arbiter;
+
+// Funkcja do generowania losowych liczb w zadanym zakresie
+int randomInRange(int min, int max) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(min, max);
+    return distribution(gen);
+}
+
+void philosopher(int id) {
+    int left_fork = id;
+    int right_fork = (id + 1) % num_philosophers;
+
+    // Symulacja myślenia
+    {
+        std::lock_guard<std::mutex> lock(arbiter);
+        std::cout << "Philosopher " << id << " is thinking." << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(randomInRange(100, 500)));
+
+    // Podniesienie widelców
+    {
+        std::lock(arbiter, forks[left_fork], forks[right_fork]);
+        std::lock_guard<std::mutex> arbiter_lock(arbiter, std::adopt_lock);
+        std::lock_guard<std::mutex> left_lock(forks[left_fork], std::adopt_lock);
+        std::lock_guard<std::mutex> right_lock(forks[right_fork], std::adopt_lock);
+
+        std::cout << "Philosopher " << id << " picks up both forks." << std::endl;
+    }
+
+    // Symulacja jedzenia
+    {
+        std::lock_guard<std::mutex> lock(arbiter);
+        std::cout << "Philosopher " << id << " is eating." << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(randomInRange(1000, 2000)));
+
+    // Odłożenie widelców
+    {
+        std::lock_guard<std::mutex> lock(arbiter);
+        std::cout << "Philosopher " << id << " puts down both forks." << std::endl;
+    }
+}
+
+int main() {
+    std::thread philosophers[num_philosophers];
+
+    // Uruchomienie wątków filozofów
+    for (int i = 0; i < num_philosophers; ++i) {
+        philosophers[i] = std::thread(philosopher, i);
+    }
+
+    // Dołączenie wątków filozofów do głównego wątku
+    for (int i = 0; i < num_philosophers; ++i) {
+        philosophers[i].join();
+    }
+
+    return 0;
+}
